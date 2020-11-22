@@ -27,10 +27,25 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_SecondFragment_to_scrollingFragment"
+            app:destination="@id/scrollingFragment" />
     </fragment>
     <fragment
         android:id="@+id/scrollingFragment"
         android:name="com.example.project.ScrollingFragment"
         android:label="fragment_scrolling"
-        tools:layout="@layout/fragment_scrolling" />
+        tools:layout="@layout/fragment_scrolling" >
+        <action
+            android:id="@+id/action_scrollingFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_scrollingFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.project.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 </navigation>

@@ -43,8 +43,8 @@ class ScrollingFragment : Fragment() {
                 else -> GridLayoutManager(context, columnCount)
             }
 
-            adapter = ItemRecyclerViewAdapter()
-            //Log.d("FFF", MainActivity.titles[0])
+            adapter = ItemRecyclerViewAdapter(arrayListOf())
+
         }
 
         return view

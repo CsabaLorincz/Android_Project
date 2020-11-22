@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/scrollingFragment"
+        android:icon="@android:drawable/arrow_down_float"
+        android:title="@string/restaurants" />
+
+    <item
+        android:id="@+id/SecondFragment"
+        android:icon="@android:drawable/arrow_down_float"
+        android:title="@string/profile" />
+
+
+</menu>
