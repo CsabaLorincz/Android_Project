@@ -14,9 +14,28 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.GET
 
 class MainActivity : AppCompatActivity() {
 
+
+    interface RestaurantApiService{
+        @GET("cities")
+        fun getProperties():
+                Call<String>
+    }
+    object RestaurantApi {
+        private const val BASE_URL = "https://opentable.herokuapp.com/api/"
+        private val retrofit = Retrofit.Builder()
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .baseUrl(BASE_URL)
+                .build()
+        val retrofitService : RestaurantApiService by lazy {
+            retrofit.create(RestaurantApiService::class.java) }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,13 +48,11 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.bottomnav)
 
         val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.scrollingFragment, R.id.SecondFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        //val restaurantViewModel: RestaurantViewModel by viewModels()
-        //restaurantViewModel.generateDummyData(10)
+
 
     }
 
