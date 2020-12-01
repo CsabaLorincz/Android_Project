@@ -57,6 +57,7 @@ class ItemRecyclerViewAdapter(
             if (!restaurants.isEmpty()) {
                 val rest = restaurants[position]
                 val bundle = bundleOf(
+                    "id" to rest.id,
                     "name" to rest.name,
                     "address" to rest.address,
                     "city" to rest.city,
@@ -70,8 +71,9 @@ class ItemRecyclerViewAdapter(
                     "phone" to rest.phone,
                     "reserve_url" to rest.reserve_url,
                     "mobile_reserve_url" to rest.mobile_reserve_url,
-                    "fav" to holder.inact
+                    "image_url" to rest.image_url
                 )
+                Log.d("asdFF", rest.image_url)
                 view.findNavController().navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
             }
         }
