@@ -42,17 +42,25 @@ class ItemRecyclerViewAdapter(
             holder.title.text=rest.name
             holder.price.text=rest.price.toString()
             holder.address.text=rest.address
-        }
-        holder.fav.setOnClickListener{
-            if(holder.inact==true) {
+            if(rest.favourite) {
                 holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
-                holder.inact = false
             }
             else{
                 holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
-                holder.inact = true
+            }
+            holder.fav.setOnClickListener{
+                if(!rest.favourite) {
+                    holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
+                    rest.changeFav()
+                }
+                else{
+                    holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
+                    rest.changeFav()
+                }
+
             }
         }
+
         holder.lay.setOnClickListener {
             if (!restaurants.isEmpty()) {
                 val rest = restaurants[position]
@@ -72,6 +80,7 @@ class ItemRecyclerViewAdapter(
                     "reserve_url" to rest.reserve_url,
                     "mobile_reserve_url" to rest.mobile_reserve_url,
                     "image_url" to rest.image_url
+
                 )
                 Log.d("asdFF", rest.image_url)
                 view.findNavController().navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
@@ -89,7 +98,7 @@ class ItemRecyclerViewAdapter(
         val price: TextView=view.findViewById(R.id.item_price)
         val fav: ImageButton=view.findViewById(R.id.item_favourite)
         val lay:LinearLayout=view.findViewById(R.id.item_layout)
-        var inact=true
+        //var inact=true
         override fun toString(): String {
             return super.toString()
         }

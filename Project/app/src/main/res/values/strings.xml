@@ -13,4 +13,6 @@
     <string name="profile">Profile</string>
     <string name="call">Call</string>
     <string name="gps">GPS</string>
+    <string name="load">Load</string>
+
 </resources>

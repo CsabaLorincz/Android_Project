@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             retrofit.create(RestaurantApiService::class.java) }
     }
     lateinit var navView: BottomNavigationView
-    fun getBottomNavView():BottomNavigationView=navView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -73,7 +74,6 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.scrollingFragment, R.id.SecondFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
 
     }
 
@@ -96,5 +96,7 @@ class MainActivity : AppCompatActivity() {
     companion object Companion{
         const val ARG_COLUMN_COUNT = "column-count"
     }
+
+
 }
 

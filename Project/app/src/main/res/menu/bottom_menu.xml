@@ -9,6 +9,10 @@
         android:id="@+id/SecondFragment"
         android:icon="@android:drawable/arrow_down_float"
         android:title="@string/profile" />
-
+    <item
+        android:id="@+id/FirstFragment"
+        android:icon="@android:drawable/arrow_down_float"
+        android:title="@string/load"
+        android:visible="false"/>
 
 </menu>
