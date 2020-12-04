@@ -14,5 +14,7 @@
     <string name="call">Call</string>
     <string name="gps">GPS</string>
     <string name="load">Load</string>
+    <string name="login">Login</string>
+    <string name="toFav">View Favourites</string>
 
 </resources>

@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+        //menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -95,6 +95,10 @@ class MainActivity : AppCompatActivity() {
 
     companion object Companion{
         const val ARG_COLUMN_COUNT = "column-count"
+        var logged_in=false
+        fun setLogin(b: Boolean){
+            logged_in=b
+        }
     }
 
 

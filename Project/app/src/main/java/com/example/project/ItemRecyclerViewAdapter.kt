@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
@@ -97,7 +98,7 @@ class ItemRecyclerViewAdapter(
         val address: TextView=view.findViewById(R.id.item_address)
         val price: TextView=view.findViewById(R.id.item_price)
         val fav: ImageButton=view.findViewById(R.id.item_favourite)
-        val lay:LinearLayout=view.findViewById(R.id.item_layout)
+        val lay: ConstraintLayout =view.findViewById(R.id.item_layout)
         //var inact=true
         override fun toString(): String {
             return super.toString()
