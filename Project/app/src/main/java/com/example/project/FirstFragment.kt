@@ -64,6 +64,7 @@ class FirstFragment : Fragment(), CoroutineScope {
 
             //Log.d("RESPONSEEEEEEEE", list.toString())
             super.onViewCreated(view, savedInstanceState)
+
             }
         }
 
