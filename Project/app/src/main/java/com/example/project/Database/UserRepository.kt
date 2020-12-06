@@ -22,4 +22,18 @@ class UserRepository(private val UserDao: UserDao) {
     suspend fun insert(user: User) {
         UserDao.insert(user)
     }
+
+    suspend fun deleteAll(){
+        UserDao.deleteAll()
+    }
+    //favourites
+    fun getFavourites():Flow<List<UserFavourites>>{
+        return UserDao.getFavouritesForAll()
+    }
+    suspend fun deleteFavourite(userId:String, restaurantID:Long){
+        UserDao.deleteFavourite(userId, restaurantID)
+    }
+    fun insertFavourites(userId:String, restaurantID:Long){
+        UserDao.insertFavourite(UserFavourites(0, userId, restaurantID))
+    }
 }

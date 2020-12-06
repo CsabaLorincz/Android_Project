@@ -125,6 +125,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         fun setLogin(b: Boolean){
             logged_in=b
         }
+        var logged_in_id:String = ""
+        fun setLoggedId(id:String){
+            logged_in_id=id
+        }
     }
 
 

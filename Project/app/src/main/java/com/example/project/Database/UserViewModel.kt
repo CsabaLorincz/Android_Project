@@ -25,6 +25,19 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     fun insert(word: User) = viewModelScope.launch {
         repository.insert(word)
     }
+
+    fun deleteAll()=viewModelScope.launch { repository.deleteAll() }
+    //favourites
+    fun getFavourites():Flow<List<UserFavourites>>{
+        return repository.getFavourites()
+    }
+    fun deleteFavourites(userId:String, restaurantId:Long)=viewModelScope.launch {
+        repository.deleteFavourite(userId, restaurantId)
+    }
+    val userFav:Flow<List<UserFavourites>> = getFavourites()
+    fun insertFavourites(userId:String, restaurantId: Long)=viewModelScope.launch {
+        repository.insertFavourites(userId, restaurantId)
+    }
 }
 
 class UserViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {

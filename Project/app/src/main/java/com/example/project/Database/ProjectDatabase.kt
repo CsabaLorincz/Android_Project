@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
-@Database(entities = arrayOf(User::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(User::class, UserFavourites::class), version = 3, exportSchema = false)
 public abstract class ProjectDatabase : RoomDatabase() {
 
     abstract fun UserDao(): UserDao
@@ -28,7 +28,7 @@ public abstract class ProjectDatabase : RoomDatabase() {
                     context.applicationContext,
                     ProjectDatabase::class.java,
                     "project_database"
-                ).addCallback(ProjectDatabaseCallback(scope))
+                ).addCallback(ProjectDatabaseCallback(scope)).fallbackToDestructiveMigration().allowMainThreadQueries()
                     .build()
                 INSTANCE = instance
                 // return instance

@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.project.Database.*
 import com.example.project.MainActivity.Companion.logged_in
+import com.example.project.MainActivity.Companion.setLoggedId
 import com.example.project.MainActivity.Companion.setLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,14 +57,15 @@ class SecondFragment : Fragment(), CoroutineScope {
             view.findViewById<ImageButton>(R.id.login_back).setOnClickListener {
                 findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
             }
-
+            val email=view.findViewById<EditText>(R.id.login_email)
             login.setOnClickListener{
                 //TODO
                 setLogin(true)
+                setLoggedId(email.text.toString())
                 findNavController().navigate(R.id.action_SecondFragment_self)
             }
 
-            val email=view.findViewById<EditText>(R.id.login_email)
+
             val name=view.findViewById<EditText>(R.id.login_name)
             val phone=view.findViewById<EditText>(R.id.login_phone)
             val address=view.findViewById<EditText>(R.id.login_address)
@@ -105,7 +107,7 @@ class SecondFragment : Fragment(), CoroutineScope {
                                "phone" to phone.text.toString()
                            )
                            setLogin(true)
-
+                           setLoggedId(email.text.toString())
                            findNavController().navigate(R.id.action_SecondFragment_self, bundle)
                        }
                    } else {
@@ -120,6 +122,7 @@ class SecondFragment : Fragment(), CoroutineScope {
         else{
             view.findViewById<Button>(R.id.button_logout).setOnClickListener{
                 setLogin(false)
+                setLoggedId("-1")
                 findNavController().navigate(R.id.action_SecondFragment_self)
             }
             view.findViewById<Button>(R.id.user_back).setOnClickListener {
