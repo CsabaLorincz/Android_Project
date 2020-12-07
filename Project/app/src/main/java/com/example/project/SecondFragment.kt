@@ -52,23 +52,53 @@ class SecondFragment : Fragment(), CoroutineScope {
         if(!logged_in) {
             val login=view.findViewById<Button>(R.id.button_login)
             val register=view.findViewById<Button>(R.id.button_register)
-            login.isEnabled=false
+            //login.isEnabled=false
             register.isEnabled=false
             view.findViewById<ImageButton>(R.id.login_back).setOnClickListener {
                 findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
             }
             val email=view.findViewById<EditText>(R.id.login_email)
-            login.setOnClickListener{
-                //TODO
-                setLogin(true)
-                setLoggedId(email.text.toString())
-                findNavController().navigate(R.id.action_SecondFragment_self)
-            }
-
-
             val name=view.findViewById<EditText>(R.id.login_name)
             val phone=view.findViewById<EditText>(R.id.login_phone)
             val address=view.findViewById<EditText>(R.id.login_address)
+            login.setOnClickListener{
+                //TODO
+                launch {
+
+
+                    val vm = activity?.viewModels<UserViewModel>()
+
+                    val list=vm?.value?.allUsers?.first()
+
+                    if (list != null) {
+
+
+                        for(i in list){
+                            Log.d("!!!3", i.toString())
+                            if(email.text.toString()==i.email){
+                                setLogin(true)
+                                setLoggedId(email.text.toString())
+                                val bundle= bundleOf("email" to i.email,
+                                        "name" to i.name,
+                                        "address" to i.address,
+                                        "phone" to i.phone)
+                                findNavController().navigate(R.id.action_SecondFragment_self, bundle)
+                            }
+                        }
+
+
+
+                    } else {
+                        Log.d("!!!3", "sad")
+                    }
+
+
+
+                }
+            }
+
+
+
             email.addTextChangedListener {
                 register.isEnabled=isValidRegisterData(email.text.toString(), name.text.toString(), phone.text.toString(), address.text.toString())
             }

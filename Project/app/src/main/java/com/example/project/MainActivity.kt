@@ -58,10 +58,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     object RestaurantApi {
         private const val BASE_URL = "https://opentable.herokuapp.com/api/"
 
-        /*private val retrofit = Retrofit.Builder()
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .baseUrl(BASE_URL)
-                .build()*/
         private val retrofit: Retrofit by lazy {
             Retrofit.Builder()
                     .baseUrl(BASE_URL)
