@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
@@ -98,7 +99,9 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        view.findViewById<ImageButton>(R.id.detail_back).setOnClickListener{
+            findNavController().navigate(R.id.scrollingFragment)
+        }
         if(restaurant!=null) {
             val call = view.findViewById<FloatingActionButton>(R.id.detail_call)
             val gps = view.findViewById<FloatingActionButton>(R.id.detail_gps)

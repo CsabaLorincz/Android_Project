@@ -5,22 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
+import android.widget.SearchView
 import androidx.activity.viewModels
-import androidx.annotation.MainThread
-import androidx.core.os.bundleOf
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project.API.ApiRepository
-import com.example.project.API.ApiViewModel
-import com.example.project.API.ApiViewModelFactory
-import com.example.project.Database.User
 import com.example.project.Database.UserFavourites
 import com.example.project.Database.UserViewModel
 import com.example.project.FirstFragment.FragmentComp.list
@@ -81,22 +74,48 @@ class ScrollingFragment : Fragment(),CoroutineScope {
     ): View? {
         Log.d("zzz", "he")
         val view = inflater.inflate(R.layout.fragment_scrolling, container, false)
-        val view2 = view.findViewById<RecyclerView>(R.id.recycler)
-        if (view2 == null) {
-            Log.d("EEE", "null")
-        } else
-            with(view2) {
 
-
-                    restaurantList = view2.findViewById(R.id.recycler)
-                    restaurantList.adapter = restaurantAdapter
-                    restaurantList.layoutManager = LinearLayoutManager(activity)
-                    restaurantList.setHasFixedSize(true)
-                    layoutManager = when {
-                        columnCount <= 1 -> LinearLayoutManager(context)
-                        else -> GridLayoutManager(context, columnCount)
+        restaurantList=view.findViewById(R.id.recycler)
+        var view2=view.findViewById<ConstraintLayout>(R.id.ScrollingConstraint)
+        val back=view.findViewById<ImageButton>(R.id.scrolling_back)
+        back.setOnClickListener{
+            view.findNavController().navigate(R.id.scrollingFragment)
+        }
+            with(view) {
+                val searchBar = view.findViewById<SearchView>(R.id.searchView)
+                searchBar.setOnCloseListener {
+                    view.findNavController().navigate(R.id.scrollingFragment)
+                    true
+                }
+                searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return if(query.isNullOrEmpty()) {
+                            false
+                        } else {
+                            restaurantAdapter.filter.filter(query.toString())
+                            true
+                        }
                     }
 
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        return if(newText.isNullOrEmpty()) {
+                            false
+                        } else {
+                            restaurantAdapter.filter.filter(newText.toString())
+                            true
+                        }
+                    }
+                })
+                    with(restaurantList) {
+                        //restaurantList = view2.findViewById(R.id.recycler)
+                        restaurantList.adapter = restaurantAdapter
+                        restaurantList.layoutManager = LinearLayoutManager(activity)
+                        restaurantList.setHasFixedSize(true)
+                        layoutManager = when {
+                            columnCount <= 1 -> LinearLayoutManager(context)
+                            else -> GridLayoutManager(context, columnCount)
+                        }
+                    }
 
             }
 

@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -30,18 +27,20 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.w3c.dom.Text
 import restaurant.Restaurant
+import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class ItemRecyclerViewAdapter(
         //TODO data constr
 
-) : RecyclerView.Adapter<ItemRecyclerViewAdapter.RestaurantViewHolder>(), CoroutineScope{
+) : RecyclerView.Adapter<ItemRecyclerViewAdapter.RestaurantViewHolder>(), CoroutineScope, Filterable {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + Job()
     lateinit var c: FragmentActivity
     var cisInit=false
     var restaurants: List<Restaurant> = listOf()
+    var searchableRestaurants: MutableList<Restaurant> = mutableListOf()
     lateinit var view:View
     var favourites: MutableList<UserFavourites> = mutableListOf()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
@@ -115,12 +114,13 @@ class ItemRecyclerViewAdapter(
 
                 )
                 Log.d("asdFF", rest.image_url)
-                view.findNavController().navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
+                if(cisInit)
+                c.findNavController(R.id.nestedScroll).navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
             }
         }
     }
 
-    override fun getItemCount(): Int = restaurants.size //TODO
+    override fun getItemCount(): Int = searchableRestaurants.size
 
     inner class RestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         //TODO
@@ -138,6 +138,7 @@ class ItemRecyclerViewAdapter(
 
     fun setData(restaurants: List<Restaurant>) {
         this.restaurants = restaurants
+        this.searchableRestaurants = restaurants.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -163,5 +164,37 @@ class ItemRecyclerViewAdapter(
         Log.d("zzz", cisInit.toString())
         Log.d("zzz", c.toString())
         notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            private val filterResults = FilterResults()
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                searchableRestaurants.clear()
+                if(constraint.isNullOrBlank()) {
+                    searchableRestaurants.addAll(restaurants)
+                } else {
+                    val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' '}
+                    for(item in 0..restaurants.size) {
+                        if(restaurants[item].name.toLowerCase(Locale.ROOT).contains(filterPattern)){
+                            searchableRestaurants.add(restaurants[item])
+                        }
+                    }
+                }
+                return filterResults.also {
+                    it.values = searchableRestaurants
+                }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                if(searchableRestaurants.isNullOrEmpty()) {
+                    setData(restaurants)
+                }
+                else {
+                    setData(searchableRestaurants)
+                }
+                notifyDataSetChanged()
+            }
+        }
     }
 }
