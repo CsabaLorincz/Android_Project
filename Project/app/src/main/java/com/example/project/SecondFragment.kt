@@ -47,14 +47,22 @@ class SecondFragment : Fragment(), CoroutineScope {
             return inflater.inflate(R.layout.fragment_second, container, false)
         return inflater.inflate(R.layout.fragment_second_display, container, false)
     }
-
+    var list:List<User>? = listOf()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val vm = activity?.viewModels<UserViewModel>()
+
         if(!logged_in) {
+            launch{
+                if(list==null ||list?.size==0) {
+                    list = vm?.value?.allUsers?.first()
+                }
+            }
             val login=view.findViewById<Button>(R.id.button_login)
             val register=view.findViewById<Button>(R.id.button_register)
             //login.isEnabled=false
             register.isEnabled=false
+
             view.findViewById<ImageButton>(R.id.login_back).setOnClickListener {
                 findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
             }
@@ -63,18 +71,19 @@ class SecondFragment : Fragment(), CoroutineScope {
             val phone=view.findViewById<EditText>(R.id.login_phone)
             val address=view.findViewById<EditText>(R.id.login_address)
             login.setOnClickListener{
-                //TODO
-                launch {
 
 
-                    val vm = activity?.viewModels<UserViewModel>()
 
-                    val list=vm?.value?.allUsers?.first()
+
+                    //val vm = activity?.viewModels<UserViewModel>()
+
+                    //if(list==null ||list?.size==0)
+                   //     list=vm?.value?.allUsers?.first()
 
                     if (list != null) {
 
 
-                        for(i in list){
+                        for(i in list!!){
                             Log.d("!!!3", i.toString())
                             if(email.text.toString()==i.email){
                                 setLogin(true)
@@ -95,7 +104,7 @@ class SecondFragment : Fragment(), CoroutineScope {
 
 
 
-                }
+
             }
 
 
@@ -113,24 +122,20 @@ class SecondFragment : Fragment(), CoroutineScope {
                 register.isEnabled=isValidRegisterData(email.text.toString(), name.text.toString(), phone.text.toString(), address.text.toString())
             }
             register.setOnClickListener{
-               launch {
+
                    val posUser = User(0, name.text.toString(), email.text.toString(), phone.text.toString(), address.text.toString())
-
-                   val vm = activity?.viewModels<UserViewModel>()
-
-                   val list=vm?.value?.allUsers?.first()
 
                    if (list != null) {
 
                        var bool=true
-                       for(i in list){
+                       for(i in list!!){
                            Log.d("!!!2", i.toString())
                             if(posUser.email==i.email || posUser.name==i.name || posUser.phone==i.phone){
                                bool=false
                             }
                        }
                        if(bool) {
-                           vm.value.insert(posUser)
+                           vm?.value?.insert(posUser)
                            val bundle = bundleOf(
                                "email" to email.text.toString(),
                                "name" to name.text.toString(),
@@ -147,7 +152,7 @@ class SecondFragment : Fragment(), CoroutineScope {
 
 
 
-               }
+
             }
         }
         else{
@@ -167,7 +172,24 @@ class SecondFragment : Fragment(), CoroutineScope {
             val address=arguments?.getString("address")
             if(email.isNullOrEmpty())
             {
+                launch {
+                    Log.d("email?", "email?")
+                    if (list == null || list?.size == 0) {
 
+                        list = vm?.value?.allUsers?.first()
+                    }
+                    if (list != null) {
+                        for (i in list!!) {
+                            if (i.email == MainActivity.logged_in_id) {
+                                view.findViewById<TextView>(R.id.user_address).text = i.address
+                                view.findViewById<TextView>(R.id.user_name).text = i.name
+                                view.findViewById<TextView>(R.id.user_phone).text = i.phone
+                                view.findViewById<TextView>(R.id.user_email).text = i.email
+                            }
+                        }
+                    }
+
+                }
             }
             else{
                 view.findViewById<TextView>(R.id.user_address).text=address
