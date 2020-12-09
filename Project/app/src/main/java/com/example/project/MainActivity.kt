@@ -29,6 +29,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import restaurant.CityBy
+import restaurant.CountryBy
 import restaurant.Restaurant
 import restaurant.RestaurantBy
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,9 +49,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
 
     interface RestaurantApiService{
-        /*@GET("cities")
+        @GET("countries")
+        suspend fun getCountries():
+                CountryBy
+        @GET("cities")
         suspend fun getCities():
-                String*/
+                CityBy
         @GET("restaurants")
         suspend fun getRestaurantsByCountry(@Query("country")country:String):
                 RestaurantBy

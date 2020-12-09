@@ -19,15 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.*
 import restaurant.Restaurant
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DetailFragment : Fragment() {
     // TODO: Rename and change types of parameters
 
@@ -37,7 +29,7 @@ class DetailFragment : Fragment() {
     private var city: String?=null
     private var state: String?=null
     private var area: String?=null
-    private var postal_code:Int?=null
+    private var postal_code:String?=null
     private var country: String?=null
     private var phone: String?=null
     private var lat:Double?=null
@@ -57,7 +49,7 @@ class DetailFragment : Fragment() {
         city=arguments?.getString("city")
         state=arguments?.getString("state")
         area=arguments?.getString("area")
-        postal_code=arguments?.getInt("postal_code")
+        postal_code=arguments?.getString("postal_code")
         country=arguments?.getString("country")
         phone=arguments?.getString("phone")
         lat=arguments?.getDouble("lat")
@@ -82,8 +74,8 @@ class DetailFragment : Fragment() {
         Log.d("asd14", image_url.toString())
 
 
-        if(id!=null && name!=null && address!=null && city!=null && state!=null && area!=null && postal_code!=null && country!=null && phone!=null && lat!=null && lng!=null && price!=null && reserve_url!=null && mobile_reserve_url!=null && image_url!=null) {
-            restaurant = Restaurant(id!!, name!!, address!!, city!!, state!!, area!!, postal_code!!, country!!, phone!!, lat!!, lng!!, price!!, reserve_url!!, mobile_reserve_url!!, image_url!!)
+        if(id!=null && name!=null && address!=null && city!=null  && area!=null && postal_code!=null && country!=null && phone!=null && lat!=null && lng!=null && price!=null && reserve_url!=null && mobile_reserve_url!=null && image_url!=null) {
+            restaurant = Restaurant(id!!, name!!, address!!, city!!, state, area!!, postal_code!!, country!!, phone!!, lat!!, lng!!, price!!, reserve_url!!, mobile_reserve_url!!, image_url!!)
         }
 
 

@@ -47,33 +47,66 @@ class FirstFragment : Fragment(), CoroutineScope {
             val factory = ApiViewModelFactory(repository)
             restaurantViewModel = ViewModelProvider(requireActivity(), factory).get(ApiViewModel::class.java)
 
-            restaurantViewModel.loadRestaurants("US")
+            restaurantViewModel.loadCities()
+            lateinit var cityList: List<String>
+            restaurantViewModel.cities.observe(requireActivity(), Observer { cities->
+                cityList=cities
+                Log.d("APIDATA_CITY", cities[0])
+                Log.d("APIDATA_CITY_LENGTH", cityList.size.toString())
+                setToCities(cityList)
+            })
+
+            restaurantViewModel.loadCountries()
+            lateinit var countryList: List<String>
+            restaurantViewModel.countries.observe(requireActivity(), Observer { countries->
+                countryList=countries
+                Log.d("APIDATA_COUNTRY", countryList[0])
+                Log.d("APIDATA_COUNTRY_LENGTH", countryList.size.toString())
+                setToCountries(countryList)
+                for(i in countryList){
+                    restaurantLoading(i)
+
+                }
+            })
+
             lateinit var list: List<Restaurant>
             restaurantViewModel.restaurants.observe(requireActivity(), Observer{ restaurants ->
                 list = restaurants
 
                 Log.d("APIDATA", restaurants[0].toString())
+                Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
                 saveToCompanion(list)
-                findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
+                if(countLoading== countries.size)
+                    findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
 
             })
-            //val obs:Observer<List<Restaurant>> = Observer(restaurantViewModel.restaurants!!.value!!)
-            /* restaurantViewModel.restaurants.observe(requireActivity(),
-                 Observer{}
-             )*/
-
-            //Log.d("RESPONSEEEEEEEE", list.toString())
+            
             super.onViewCreated(view, savedInstanceState)
 
             }
         }
-
+    fun restaurantLoading(country: String){
+        launch{
+            Log.d("...alma", country)
+            restaurantViewModel.loadRestaurants(country)
+        }
+    }
     companion object FragmentComp{
         var list:List<Restaurant> =listOf()
-
+        var countries:List<String> = listOf()
+        var cities: List<String> = listOf()
+        var countLoading=0
         fun saveToCompanion(l: List<Restaurant>){
-            list=l
+            list+=l
+            ++countLoading
         }
+        fun setToCountries(c: List<String>){
+            countries=c
+        }
+        fun setToCities(c: List<String>){
+            cities=c
+        }
+
     }
     }
 

@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.project.Database.*
 import com.example.project.MainActivity.Companion.logged_in
@@ -155,8 +156,10 @@ class SecondFragment : Fragment(), CoroutineScope {
                 setLoggedId("-1")
                 findNavController().navigate(R.id.action_SecondFragment_self)
             }
-            view.findViewById<Button>(R.id.user_back).setOnClickListener {
-                findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
+            Log.d("...", MainActivity.logged_in.toString())
+            view.findViewById<ImageButton>(R.id.user_back).setOnClickListener {
+                view.findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
+                //activity?.findNavController(R.id.secondConstraint)?.navigate(R.id.action_SecondFragment_to_scrollingFragment)
             }
             val email=arguments?.getString("email")
             val name=arguments?.getString("name")
