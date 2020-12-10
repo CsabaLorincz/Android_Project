@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
+import java.nio.file.attribute.UserDefinedFileAttributeView
 
 class UserRepository(private val UserDao: UserDao) {
 
@@ -35,5 +36,8 @@ class UserRepository(private val UserDao: UserDao) {
     }
     fun insertFavourites(userId:String, restaurantID:Long){
         UserDao.insertFavourite(UserFavourites(0, userId, restaurantID))
+    }
+    fun deleteALLFav(){
+        UserDao.deleteAllFav()
     }
 }

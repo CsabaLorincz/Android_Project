@@ -46,41 +46,62 @@ class FirstFragment : Fragment(), CoroutineScope {
             val repository = ApiRepository()
             val factory = ApiViewModelFactory(repository)
             restaurantViewModel = ViewModelProvider(requireActivity(), factory).get(ApiViewModel::class.java)
+            try {
+                restaurantViewModel.loadCities()
+                lateinit var cityList: List<String>
+                restaurantViewModel.cities.observe(requireActivity(), Observer { cities ->
+                    cityList = cities
+                    Log.d("APIDATA_CITY", cities[0])
+                    Log.d("APIDATA_CITY_LENGTH", cityList.size.toString())
+                    setToCities(cityList)
+                })
 
-            restaurantViewModel.loadCities()
-            lateinit var cityList: List<String>
-            restaurantViewModel.cities.observe(requireActivity(), Observer { cities->
-                cityList=cities
-                Log.d("APIDATA_CITY", cities[0])
-                Log.d("APIDATA_CITY_LENGTH", cityList.size.toString())
-                setToCities(cityList)
-            })
+                restaurantViewModel.loadCountries()
+                lateinit var countryList: List<String>
+                restaurantViewModel.countries.observe(requireActivity(), Observer { countries ->
+                    countryList = countries
+                    Log.d("APIDATA_COUNTRY", countryList[0])
+                    Log.d("APIDATA_COUNTRY_LENGTH", countryList.size.toString())
+                    setToCountries(countryList)
+                    for (i in countryList) {
+                        restaurantLoading(i)
 
-            restaurantViewModel.loadCountries()
-            lateinit var countryList: List<String>
-            restaurantViewModel.countries.observe(requireActivity(), Observer { countries->
-                countryList=countries
-                Log.d("APIDATA_COUNTRY", countryList[0])
-                Log.d("APIDATA_COUNTRY_LENGTH", countryList.size.toString())
-                setToCountries(countryList)
-                for(i in countryList){
-                    restaurantLoading(i)
+                    }
+                })
 
-                }
-            })
+                lateinit var list: List<Restaurant>
+                restaurantViewModel.restaurants.observe(requireActivity(), Observer { restaurants ->
+                    list = restaurants
 
-            lateinit var list: List<Restaurant>
-            restaurantViewModel.restaurants.observe(requireActivity(), Observer{ restaurants ->
-                list = restaurants
+                    Log.d("APIDATA", restaurants[0].toString())
+                    Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
+                    saveToCompanion(list)
+                    if (countLoading == countries.size)
+                        findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
 
-                Log.d("APIDATA", restaurants[0].toString())
-                Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
-                saveToCompanion(list)
-                if(countLoading== countries.size)
-                    findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
+                })
+            }catch(e: Exception){
+                var citiesBackup:List<String> = listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged")
+                var countriesBackup: List<String> = listOf("Hungary", "Romania")
+                var restaurantsBackup: List<Restaurant> = listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
+                "Hargita", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                        Restaurant(1, "Discordia", "1 Street", "Koronka",
+                                "Maros", "Hely 2", "021223", "Romania", "075655634", 0.1, 0.1, 4.0, "", "", "https://media4.s-nbcnews.com/i/newscms/2020_09/1543282/chicken-fingers-today-main-200227_c73e99947f638328a263407fb90a9dc8.jpg"),
+                        Restaurant(2, "Studio", "2 Street", "Marosvasarhely",
+                                "Maros", "Hely 3", "0212213", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", "https://properpizza.ro/rmvalcea/wp-content/uploads/2020/03/Proper-Pizza-Pasta-Pizza-Casei-00.jpg"),
+                        Restaurant(3, "Bisrol Bus Caffee", "0 Street", "Marosvasarhely",
+                                "Maros", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                        Restaurant(4, "asd", "0 Street", "Szeged",
+                                "Szeged", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                        Restaurant(5, "asd Budapest", "0 Street", "Budapest",
+                                "Budapest", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", ""))
+                saveToCompanion(restaurantsBackup)
+                setToCities(citiesBackup)
+                setToCountries(countriesBackup)
+                findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
 
-            })
-            
+
+            }
             super.onViewCreated(view, savedInstanceState)
 
             }

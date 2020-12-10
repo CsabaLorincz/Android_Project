@@ -61,8 +61,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
     }
     object RestaurantApi {
-        private const val BASE_URL = "https://opentable.herokuapp.com/api/"
-
+        //private const val BASE_URL = "https://opentable.herokuapp.com/api/"
+        private const val BASE_URL= "https://ratpark-api.imok.space/"
         private val retrofit: Retrofit by lazy {
             Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -96,6 +96,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
 
+            //userViewModel.deleteAllFav()
+            //userViewModel.deleteAll()
             userViewModel.insert(User(0, "1", "asd@asd.asd", "123", "1 12"))
 
         }
@@ -130,6 +132,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         fun setLoggedId(id:String){
             logged_in_id=id
         }
+
+        var filterFlag=0
     }
 
 

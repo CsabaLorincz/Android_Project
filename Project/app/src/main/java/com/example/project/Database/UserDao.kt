@@ -29,4 +29,7 @@ interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertFavourite(userFavourites: UserFavourites)
+
+    @Query("DELETE FROM user_favourites")
+    fun deleteAllFav()
 }

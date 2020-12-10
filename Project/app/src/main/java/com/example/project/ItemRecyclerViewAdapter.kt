@@ -43,6 +43,9 @@ class ItemRecyclerViewAdapter(
     var searchableRestaurants: MutableList<Restaurant> = mutableListOf()
     lateinit var view:View
     var favourites: MutableList<UserFavourites> = mutableListOf()
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_item, parent, false)
@@ -52,70 +55,74 @@ class ItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
 
-        if(!restaurants.isEmpty()) {
+        if(!restaurants.isEmpty() && position<searchableRestaurants.size) {
             holder.fav.isEnabled = MainActivity.logged_in
-            val rest = restaurants[position]
-            Log.d("RESTTTT", rest.toString())
-            Glide.with(holder.itemView.context)
-                .load(rest.image_url)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .into(holder.img).view
-            holder.title.text = rest.name
-            holder.price.text = rest.price.toString()
-            holder.address.text = rest.address
-            if (cisInit) {
-                Log.d("zzz", "entered")
-                if (isFavouriteForLoggedIn(rest.id)) {
-                    holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
-
-                } else {
-                    holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
-
-                }
-                holder.fav.setOnClickListener {
+            var rest: Restaurant
+            if (position < searchableRestaurants.size) {
+                rest = restaurants[position]
+                Log.d("RESTTTT", rest.toString())
+                Glide.with(holder.itemView.context)
+                        .load(rest.image_url)
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .into(holder.img).view
+                holder.title.text = rest.name
+                holder.price.text = rest.price.toString()
+                holder.address.text = rest.address
+                if (cisInit) {
+                    Log.d("zzz", "entered")
                     if (isFavouriteForLoggedIn(rest.id)) {
+                        holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
+
+                    } else {
                         holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
-                        favourites.remove(UserFavourites(0, MainActivity.logged_in_id, rest.id))
+
+                    }
+                    holder.fav.setOnClickListener {
+                        if (isFavouriteForLoggedIn(rest.id)) {
+                            holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
+                            favourites.remove(UserFavourites(0, MainActivity.logged_in_id, rest.id))
 
                             c.viewModels<UserViewModel>().value.deleteFavourites(MainActivity.logged_in_id, rest.id)
 
 
-                    } else {
-                        holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
-                        favourites.add(UserFavourites(0, MainActivity.logged_in_id, rest.id))
+                        } else {
+                            holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
+                            favourites.add(UserFavourites(0, MainActivity.logged_in_id, rest.id))
 
                             c.viewModels<UserViewModel>().value.insertFavourites(MainActivity.logged_in_id, rest.id)
 
+                        }
+
                     }
-
                 }
-            }
-        }
 
-        holder.lay.setOnClickListener {
-            if (!restaurants.isEmpty()) {
-                val rest = restaurants[position]
-                val bundle = bundleOf(
-                    "id" to rest.id,
-                    "name" to rest.name,
-                    "address" to rest.address,
-                    "city" to rest.city,
-                    "state" to rest.state,
-                    "area" to rest.area,
-                    "postal_code" to rest.postal_code,
-                    "country" to rest.country,
-                    "price" to rest.price,
-                    "lat" to rest.lat,
-                    "lng" to rest.lng,
-                    "phone" to rest.phone,
-                    "reserve_url" to rest.reserve_url,
-                    "mobile_reserve_url" to rest.mobile_reserve_url,
-                    "image_url" to rest.image_url
 
-                )
-                Log.d("asdFF", rest.image_url)
-                if(cisInit)
-                c.findNavController(R.id.nestedScroll).navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
+                holder.lay.setOnClickListener {
+                    if (!restaurants.isEmpty()) {
+                        val rest = restaurants[position]
+                        val bundle = bundleOf(
+                                "id" to rest.id,
+                                "name" to rest.name,
+                                "address" to rest.address,
+                                "city" to rest.city,
+                                "state" to rest.state,
+                                "area" to rest.area,
+                                "postal_code" to rest.postal_code,
+                                "country" to rest.country,
+                                "price" to rest.price,
+                                "lat" to rest.lat,
+                                "lng" to rest.lng,
+                                "phone" to rest.phone,
+                                "reserve_url" to rest.reserve_url,
+                                "mobile_reserve_url" to rest.mobile_reserve_url,
+                                "image_url" to rest.image_url
+
+                        )
+                        Log.d("asdFF", rest.image_url)
+                        if (cisInit)
+                            c.findNavController(R.id.nestedScroll).navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
+                    }
+                }
             }
         }
     }
@@ -123,14 +130,14 @@ class ItemRecyclerViewAdapter(
     override fun getItemCount(): Int = searchableRestaurants.size
 
     inner class RestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        //TODO
+
         val img: ImageView=view.findViewById(R.id.item_image)
         val title:TextView=view.findViewById(R.id.item_title)
         val address: TextView=view.findViewById(R.id.item_address)
         val price: TextView=view.findViewById(R.id.item_price)
         val fav: ImageButton=view.findViewById(R.id.item_favourite)
         val lay: ConstraintLayout =view.findViewById(R.id.item_layout)
-        //var inact=true
+
         override fun toString(): String {
             return super.toString()
         }
@@ -171,16 +178,76 @@ class ItemRecyclerViewAdapter(
             private val filterResults = FilterResults()
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 searchableRestaurants.clear()
-                if(constraint.isNullOrBlank()) {
-                    searchableRestaurants.addAll(restaurants)
-                } else {
-                    val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' '}
-                    for(item in 0..restaurants.size) {
-                        if(restaurants[item].name.toLowerCase(Locale.ROOT).contains(filterPattern)){
-                            searchableRestaurants.add(restaurants[item])
+
+                //none selected
+                if(MainActivity.filterFlag==0){
+                    searchableRestaurants=restaurants.toMutableList()
+                }
+                ////searchBar
+                Log.d("filter", MainActivity.filterFlag.toString())
+                if(MainActivity.filterFlag==1) {
+                    if (constraint.isNullOrBlank()) {
+                        searchableRestaurants.addAll(restaurants)
+                    } else {
+                        val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
+                        for (item in 0..restaurants.size) {
+                            if (restaurants[item].name.toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                                searchableRestaurants.add(restaurants[item])
+                            }
+                        }
+                    }
+
+                }
+                //country
+                if(MainActivity.filterFlag==2){
+                    if (constraint.isNullOrBlank()) {
+                        searchableRestaurants.addAll(restaurants)
+                    } else {
+                        val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
+                        for (item in 0..restaurants.size) {
+                            if (restaurants[item].country.toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                                searchableRestaurants.add(restaurants[item])
+                            }
                         }
                     }
                 }
+                //city
+                if(MainActivity.filterFlag==3){
+                    if (constraint.isNullOrBlank()) {
+                        searchableRestaurants.addAll(restaurants)
+                    } else {
+                        val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
+                        for (item in 0..restaurants.size) {
+                            if (restaurants[item].city.toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                                searchableRestaurants.add(restaurants[item])
+                            }
+                        }
+                    }
+                }
+                //favourite
+                if(MainActivity.filterFlag==4){
+                    if (constraint.isNullOrBlank()) {
+                        searchableRestaurants.addAll(restaurants)
+                        Log.d("favo", "false")
+                    } else {
+                        Log.d("favo", "true")
+                        for (item in 0..favourites.size) {
+
+                            for(jtem in 0..restaurants.size) {
+
+                                if (favourites[item].email == MainActivity.logged_in_id ) {
+                                    Log.d("favo", "${favourites[item]}")
+                                    Log.d("favo", restaurants[jtem].toString())
+                                    if(favourites[item].restaurantId==restaurants[jtem].id) {
+                                        Log.d("favo", restaurants[jtem].toString())
+                                        searchableRestaurants.add(restaurants[jtem])
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return filterResults.also {
                     it.values = searchableRestaurants
                 }

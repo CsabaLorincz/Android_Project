@@ -38,6 +38,10 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     fun insertFavourites(userId:String, restaurantId: Long)=viewModelScope.launch {
         repository.insertFavourites(userId, restaurantId)
     }
+
+    fun deleteAllFav(){
+        repository.deleteALLFav()
+    }
 }
 
 class UserViewModelFactory(private val repository: UserRepository) : ViewModelProvider.Factory {
