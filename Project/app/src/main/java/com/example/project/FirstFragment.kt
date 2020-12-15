@@ -76,8 +76,24 @@ class FirstFragment : Fragment(), CoroutineScope {
                     Log.d("APIDATA", restaurants[0].toString())
                     Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
                     saveToCompanion(list)
-                    if (countLoading == countries.size)
+                    if (countLoading == countries.size){
+                        setToCountries(listOf("Hungary", "Romania"))
+                        setToCities(listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged"))
+                        saveToCompanion(listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
+                                "Hargita", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                Restaurant(1, "Discordia", "1 Street", "Koronka",
+                                        "Maros", "Hely 2", "021223", "Romania", "075655634", 0.1, 0.1, 4.0, "", "", "https://media4.s-nbcnews.com/i/newscms/2020_09/1543282/chicken-fingers-today-main-200227_c73e99947f638328a263407fb90a9dc8.jpg"),
+                                Restaurant(2, "Studio", "2 Street", "Marosvasarhely",
+                                        "Maros", "Hely 3", "0212213", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", "https://properpizza.ro/rmvalcea/wp-content/uploads/2020/03/Proper-Pizza-Pasta-Pizza-Casei-00.jpg"),
+                                Restaurant(3, "Bisrol Bus Caffee", "0 Street", "Marosvasarhely",
+                                        "Maros", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                Restaurant(4, "asd", "0 Street", "Szeged",
+                                        "Szeged", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                Restaurant(5, "asd Budapest", "0 Street", "Budapest",
+                                        "Budapest", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", "")))
+
                         findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
+                    }
 
                 })
             }catch(e: Exception){
@@ -122,10 +138,10 @@ class FirstFragment : Fragment(), CoroutineScope {
             ++countLoading
         }
         fun setToCountries(c: List<String>){
-            countries=c
+            countries+=c
         }
         fun setToCities(c: List<String>){
-            cities=c
+            cities+=c
         }
 
     }

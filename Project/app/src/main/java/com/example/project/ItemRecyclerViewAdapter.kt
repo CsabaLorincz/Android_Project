@@ -31,7 +31,7 @@ import java.util.*
 import kotlin.coroutines.CoroutineContext
 
 class ItemRecyclerViewAdapter(
-        //TODO data constr
+
 
 ) : RecyclerView.Adapter<ItemRecyclerViewAdapter.RestaurantViewHolder>(), CoroutineScope, Filterable {
 
@@ -58,7 +58,8 @@ class ItemRecyclerViewAdapter(
         if(!restaurants.isEmpty() && position<searchableRestaurants.size) {
             holder.fav.isEnabled = MainActivity.logged_in
             var rest: Restaurant
-            if (position < searchableRestaurants.size) {
+            //if (position < searchableRestaurants.size)
+            try{
                 rest = restaurants[position]
                 Log.d("RESTTTT", rest.toString())
                 Glide.with(holder.itemView.context)
@@ -80,8 +81,13 @@ class ItemRecyclerViewAdapter(
                     holder.fav.setOnClickListener {
                         if (isFavouriteForLoggedIn(rest.id)) {
                             holder.fav.setImageResource(android.R.drawable.btn_star_big_off)
-                            favourites.remove(UserFavourites(0, MainActivity.logged_in_id, rest.id))
-
+                            
+                            for(i in favourites){
+                                if(i.restaurantId==rest.id && i.email==MainActivity.logged_in_id){
+                                    favourites.remove(i)
+                                    break
+                                }
+                            }
                             c.viewModels<UserViewModel>().value.deleteFavourites(MainActivity.logged_in_id, rest.id)
 
 
@@ -123,6 +129,8 @@ class ItemRecyclerViewAdapter(
                             c.findNavController(R.id.nestedScroll).navigate(R.id.action_scrollingFragment_to_detailFragment, bundle)
                     }
                 }
+            }catch(e: Exception){
+                Log.d("EXCEPTION", e.toString())
             }
         }
     }
@@ -190,7 +198,7 @@ class ItemRecyclerViewAdapter(
                         searchableRestaurants.addAll(restaurants)
                     } else {
                         val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
-                        for (item in 0..restaurants.size) {
+                        for (item in 0..restaurants.size-1) {
                             if (restaurants[item].name.toLowerCase(Locale.ROOT).contains(filterPattern)) {
                                 searchableRestaurants.add(restaurants[item])
                             }
@@ -204,7 +212,7 @@ class ItemRecyclerViewAdapter(
                         searchableRestaurants.addAll(restaurants)
                     } else {
                         val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
-                        for (item in 0..restaurants.size) {
+                        for (item in 0..restaurants.size-1) {
                             if (restaurants[item].country.toLowerCase(Locale.ROOT).contains(filterPattern)) {
                                 searchableRestaurants.add(restaurants[item])
                             }
@@ -217,7 +225,7 @@ class ItemRecyclerViewAdapter(
                         searchableRestaurants.addAll(restaurants)
                     } else {
                         val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
-                        for (item in 0..restaurants.size) {
+                        for (item in 0..restaurants.size-1) {
                             if (restaurants[item].city.toLowerCase(Locale.ROOT).contains(filterPattern)) {
                                 searchableRestaurants.add(restaurants[item])
                             }
@@ -231,16 +239,17 @@ class ItemRecyclerViewAdapter(
                         Log.d("favo", "false")
                     } else {
                         Log.d("favo", "true")
-                        for (item in 0..favourites.size) {
+                        for (item in 0..favourites.size-1) {
 
-                            for(jtem in 0..restaurants.size) {
+                            for(jtem in 0..restaurants.size-1) {
 
                                 if (favourites[item].email == MainActivity.logged_in_id ) {
                                     Log.d("favo", "${favourites[item]}")
                                     Log.d("favo", restaurants[jtem].toString())
                                     if(favourites[item].restaurantId==restaurants[jtem].id) {
                                         Log.d("favo", restaurants[jtem].toString())
-                                        searchableRestaurants.add(restaurants[jtem])
+                                        if(!searchableRestaurants.contains(restaurants[jtem]))
+                                            searchableRestaurants.add(restaurants[jtem])
                                     }
                                 }
                             }
