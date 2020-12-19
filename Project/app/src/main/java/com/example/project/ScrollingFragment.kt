@@ -6,23 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.project.API.ApiRepository
-import com.example.project.API.ApiViewModel
-import com.example.project.API.ApiViewModelFactory
+import com.example.project.Database.ProjectDatabaseApp
 import com.example.project.Database.UserFavourites
 import com.example.project.Database.UserViewModel
+import com.example.project.Database.UserViewModelFactory
 import com.example.project.FirstFragment.FragmentComp.list
 import com.example.project.MainActivity.Companion.filterFlag
 import com.example.project.MainActivity.Companion.logged_in
-import kotlinx.android.synthetic.main.fragment_scrolling.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import restaurant.Restaurant
@@ -38,7 +34,9 @@ class ScrollingFragment : Fragment(),CoroutineScope {
     private lateinit var restaurantAdapter: ItemRecyclerViewAdapter
     private lateinit var restaurants: List<Restaurant>
     private var userFav: List<UserFavourites>? = null
-    private var ready:Boolean =false
+    val userViewModel: UserViewModel by viewModels {
+        UserViewModelFactory((activity?.application as ProjectDatabaseApp).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +45,6 @@ class ScrollingFragment : Fragment(),CoroutineScope {
             columnCount = it.getInt(MainActivity.ARG_COLUMN_COUNT)
 
         }
-        //Log.d("Check", restaurants[0].toString())
         restaurants=list
 
         if(!this::restaurantAdapter.isInitialized) {
@@ -57,7 +54,7 @@ class ScrollingFragment : Fragment(),CoroutineScope {
 
             val x=launch {
 
-                userFav = activity?.viewModels<UserViewModel>()?.value?.userFav?.first()
+                userFav=userViewModel.userFav.first()
                 Log.d("zzz", userFav.toString())
                 restaurantAdapter.setFavourite(userFav!!)
                 Log.d("zzz", "2")
@@ -67,8 +64,6 @@ class ScrollingFragment : Fragment(),CoroutineScope {
 
             }
             x.start()
-            Log.d("zzz", "zzz")
-
             Log.d("zzz", "ready")
         }
 
@@ -82,7 +77,6 @@ class ScrollingFragment : Fragment(),CoroutineScope {
         val view = inflater.inflate(R.layout.fragment_scrolling, container, false)
 
         restaurantList=view.findViewById(R.id.recycler)
-        var view2=view.findViewById<ConstraintLayout>(R.id.ScrollingConstraint)
         val back=view.findViewById<ImageButton>(R.id.scrolling_back)
         back.setOnClickListener{
             view.findNavController().navigate(R.id.scrollingFragment)
@@ -172,7 +166,6 @@ class ScrollingFragment : Fragment(),CoroutineScope {
                 }
 
                 with(restaurantList) {
-                        //restaurantList = view2.findViewById(R.id.recycler)
                         restaurantList.adapter = restaurantAdapter
                         restaurantList.layoutManager = LinearLayoutManager(activity)
                         restaurantList.setHasFixedSize(true)

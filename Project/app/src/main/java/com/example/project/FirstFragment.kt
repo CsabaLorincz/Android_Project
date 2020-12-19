@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,9 +20,6 @@ import restaurant.Restaurant
 import kotlin.coroutines.CoroutineContext
 
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class FirstFragment : Fragment(), CoroutineScope {
 
     private lateinit var restaurantViewModel: ApiViewModel
@@ -33,12 +29,7 @@ class FirstFragment : Fragment(), CoroutineScope {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
-
-        val view=inflater!!.inflate(R.layout.fragment_first, container, false)
-
-        return view
+        return inflater.inflate(R.layout.fragment_first, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,29 +68,31 @@ class FirstFragment : Fragment(), CoroutineScope {
                     Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
                     saveToCompanion(list)
                     if (countLoading == countries.size){
-                        setToCountries(listOf("Hungary", "Romania"))
-                        setToCities(listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged"))
-                        saveToCompanion(listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
-                                "Hargita", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
-                                Restaurant(1, "Discordia", "1 Street", "Koronka",
-                                        "Maros", "Hely 2", "021223", "Romania", "075655634", 0.1, 0.1, 4.0, "", "", "https://media4.s-nbcnews.com/i/newscms/2020_09/1543282/chicken-fingers-today-main-200227_c73e99947f638328a263407fb90a9dc8.jpg"),
-                                Restaurant(2, "Studio", "2 Street", "Marosvasarhely",
-                                        "Maros", "Hely 3", "0212213", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", "https://properpizza.ro/rmvalcea/wp-content/uploads/2020/03/Proper-Pizza-Pasta-Pizza-Casei-00.jpg"),
-                                Restaurant(3, "Bisrol Bus Caffee", "0 Street", "Marosvasarhely",
-                                        "Maros", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
-                                Restaurant(4, "asd", "0 Street", "Szeged",
-                                        "Szeged", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", ""),
-                                Restaurant(5, "asd Budapest", "0 Street", "Budapest",
-                                        "Budapest", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", "")))
+                        if(countries.size==1){
+                            setToCountries(listOf("Hungary", "Romania"))
+                            setToCities(listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged"))
+                            saveToCompanion(listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
+                                    "Hargita", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                    Restaurant(1, "Discordia", "1 Street", "Koronka",
+                                            "Maros", "Hely 2", "021223", "Romania", "075655634", 0.1, 0.1, 4.0, "", "", "https://media4.s-nbcnews.com/i/newscms/2020_09/1543282/chicken-fingers-today-main-200227_c73e99947f638328a263407fb90a9dc8.jpg"),
+                                    Restaurant(2, "Studio", "2 Street", "Marosvasarhely",
+                                            "Maros", "Hely 3", "0212213", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", "https://properpizza.ro/rmvalcea/wp-content/uploads/2020/03/Proper-Pizza-Pasta-Pizza-Casei-00.jpg"),
+                                    Restaurant(3, "Bisrol Bus Caffee", "0 Street", "Marosvasarhely",
+                                            "Maros", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                    Restaurant(4, "asd", "0 Street", "Szeged",
+                                            "Szeged", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", ""),
+                                    Restaurant(5, "asd Budapest", "0 Street", "Budapest",
+                                            "Budapest", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", "")))
 
+                        }
                         findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
                     }
 
                 })
             }catch(e: Exception){
-                var citiesBackup:List<String> = listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged")
-                var countriesBackup: List<String> = listOf("Hungary", "Romania")
-                var restaurantsBackup: List<Restaurant> = listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
+                val citiesBackup:List<String> = listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged")
+                val countriesBackup: List<String> = listOf("Hungary", "Romania")
+                val restaurantsBackup: List<Restaurant> = listOf(Restaurant(0, "Falo", "0 Street", "Csikszereda",
                 "Hargita", "Hely", "0212", "Romania", "0756556", 0.1, 0.1, 4.0, "", "", ""),
                         Restaurant(1, "Discordia", "1 Street", "Koronka",
                                 "Maros", "Hely 2", "021223", "Romania", "075655634", 0.1, 0.1, 4.0, "", "", "https://media4.s-nbcnews.com/i/newscms/2020_09/1543282/chicken-fingers-today-main-200227_c73e99947f638328a263407fb90a9dc8.jpg"),

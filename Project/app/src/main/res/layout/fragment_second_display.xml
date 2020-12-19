@@ -56,24 +56,15 @@
         app:layout_constraintTop_toBottomOf="@+id/user_email" />
 
     <Button
-        android:id="@+id/to_fav"
-        android:layout_width="127dp"
-        android:layout_height="78dp"
-        android:layout_marginTop="13dp"
-        android:text="@string/toFav"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_address" />
-
-    <Button
         android:id="@+id/button_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
         android:text="LogOut"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/to_fav" />
+        app:layout_constraintTop_toBottomOf="@+id/user_address" />
 
     <ImageView
         android:id="@+id/imageView4"

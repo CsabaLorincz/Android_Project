@@ -1,40 +1,26 @@
 package com.example.project
 
 import android.os.Bundle
-import android.provider.SyncStateContract
-import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.viewModels
-import androidx.core.os.bundleOf
-import androidx.core.view.get
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.project.Database.ProjectDatabaseApp
-import com.example.project.Database.User
 import com.example.project.Database.UserViewModel
 import com.example.project.Database.UserViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import retrofit2.Call
 import retrofit2.Retrofit
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 import restaurant.CityBy
 import restaurant.CountryBy
-import restaurant.Restaurant
 import restaurant.RestaurantBy
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import kotlin.coroutines.CoroutineContext
@@ -95,25 +81,17 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 AppBarConfiguration(setOf(R.id.scrollingFragment, R.id.SecondFragment))
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
-
             //userViewModel.deleteAllFav()
             //userViewModel.deleteAll()
-            userViewModel.insert(User(0, "1", "asd@asd.asd", "123", "1 12"))
-
         }
     }
     @InternalCoroutinesApi
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         return when (item.itemId) {
             R.id.action_settings -> true

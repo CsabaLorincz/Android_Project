@@ -2,7 +2,6 @@ package com.example.project.Database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import restaurant.Restaurant
 
 
 @Entity(tableName = "user_favourites")

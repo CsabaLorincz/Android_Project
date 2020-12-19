@@ -8,21 +8,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.*
 import restaurant.Restaurant
 
 
 class DetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-
     private var id:Long?=null
     private var name: String?=null
     private var address: String?=null
@@ -83,9 +78,6 @@ class DetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-
-
         return inflater.inflate(R.layout.fragment_detail, container, false)
     }
 
@@ -131,22 +123,4 @@ class DetailFragment : Fragment() {
         }
     }
 
-    /*companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        /*@JvmStatic
-        fun newInstance(param1: Restaurant) =
-                DetailFragment().apply {
-                    arguments = Bundle().apply {
-                        put("restaurant", param1)
-                    }
-                }*/
-    }*/
 }

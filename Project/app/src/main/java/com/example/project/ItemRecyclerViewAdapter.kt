@@ -1,6 +1,5 @@
 package com.example.project
 
-import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,22 +9,16 @@ import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.CoroutinesRoom
-import androidx.room.Entity
 import com.bumptech.glide.Glide
-import com.example.project.API.ApiViewModel
+import com.example.project.Database.ProjectDatabaseApp
 import com.example.project.Database.UserFavourites
 import com.example.project.Database.UserViewModel
+import com.example.project.Database.UserViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import restaurant.Restaurant
 import java.util.*
 import kotlin.coroutines.CoroutineContext
@@ -45,7 +38,6 @@ class ItemRecyclerViewAdapter(
     var favourites: MutableList<UserFavourites> = mutableListOf()
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.fragment_item, parent, false)
@@ -58,7 +50,7 @@ class ItemRecyclerViewAdapter(
         if(!restaurants.isEmpty() && position<searchableRestaurants.size) {
             holder.fav.isEnabled = MainActivity.logged_in
             var rest: Restaurant
-            //if (position < searchableRestaurants.size)
+
             try{
                 rest = restaurants[position]
                 Log.d("RESTTTT", rest.toString())
@@ -70,6 +62,9 @@ class ItemRecyclerViewAdapter(
                 holder.price.text = rest.price.toString()
                 holder.address.text = rest.address
                 if (cisInit) {
+                    val userViewModel: UserViewModel by c.viewModels {
+                        UserViewModelFactory((c.application as ProjectDatabaseApp).repository)
+                    }
                     Log.d("zzz", "entered")
                     if (isFavouriteForLoggedIn(rest.id)) {
                         holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
@@ -88,15 +83,12 @@ class ItemRecyclerViewAdapter(
                                     break
                                 }
                             }
-                            c.viewModels<UserViewModel>().value.deleteFavourites(MainActivity.logged_in_id, rest.id)
-
+                            userViewModel.deleteFavourites(MainActivity.logged_in_id, rest.id)
 
                         } else {
                             holder.fav.setImageResource(android.R.drawable.btn_star_big_on)
                             favourites.add(UserFavourites(0, MainActivity.logged_in_id, rest.id))
-
-                            c.viewModels<UserViewModel>().value.insertFavourites(MainActivity.logged_in_id, rest.id)
-
+                            userViewModel.insertFavourites(MainActivity.logged_in_id, rest.id)
                         }
 
                     }

@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -23,26 +22,23 @@ import com.example.project.MainActivity.Companion.setLogin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import java.lang.Double.parseDouble
 import java.lang.Integer.parseInt
 import kotlin.coroutines.CoroutineContext
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
+
 class SecondFragment : Fragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + Job()
+    val vm: UserViewModel by viewModels {
+        UserViewModelFactory((activity?.application as ProjectDatabaseApp).repository)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         if(!logged_in)
             return inflater.inflate(R.layout.fragment_second, container, false)
         return inflater.inflate(R.layout.fragment_second_display, container, false)
@@ -50,17 +46,15 @@ class SecondFragment : Fragment(), CoroutineScope {
     var list:List<User>? = listOf()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val vm = activity?.viewModels<UserViewModel>()
 
         if(!logged_in) {
             launch{
                 if(list==null ||list?.size==0) {
-                    list = vm?.value?.allUsers?.first()
+                    list=vm.allUsers.first()
                 }
             }
             val login=view.findViewById<Button>(R.id.button_login)
             val register=view.findViewById<Button>(R.id.button_register)
-            //login.isEnabled=false
             register.isEnabled=false
 
             view.findViewById<ImageButton>(R.id.login_back).setOnClickListener {
@@ -71,18 +65,7 @@ class SecondFragment : Fragment(), CoroutineScope {
             val phone=view.findViewById<EditText>(R.id.login_phone)
             val address=view.findViewById<EditText>(R.id.login_address)
             login.setOnClickListener{
-
-
-
-
-                    //val vm = activity?.viewModels<UserViewModel>()
-
-                    //if(list==null ||list?.size==0)
-                   //     list=vm?.value?.allUsers?.first()
-
                     if (list != null) {
-
-
                         for(i in list!!){
                             Log.d("!!!3", i.toString())
                             if(email.text.toString()==i.email){
@@ -95,19 +78,10 @@ class SecondFragment : Fragment(), CoroutineScope {
                                 findNavController().navigate(R.id.action_SecondFragment_self, bundle)
                             }
                         }
-
-
-
                     } else {
                         Log.d("!!!3", "sad")
                     }
-
-
-
-
             }
-
-
 
             email.addTextChangedListener {
                 register.isEnabled=isValidRegisterData(email.text.toString(), name.text.toString(), phone.text.toString(), address.text.toString())
@@ -135,7 +109,7 @@ class SecondFragment : Fragment(), CoroutineScope {
                             }
                        }
                        if(bool) {
-                           vm?.value?.insert(posUser)
+                           vm.insert(posUser)
                            val bundle = bundleOf(
                                "email" to email.text.toString(),
                                "name" to name.text.toString(),
@@ -149,10 +123,6 @@ class SecondFragment : Fragment(), CoroutineScope {
                    } else {
                        Log.d("!!!2", "sad")
                    }
-
-
-
-
             }
         }
         else{
@@ -161,10 +131,9 @@ class SecondFragment : Fragment(), CoroutineScope {
                 setLoggedId("-1")
                 findNavController().navigate(R.id.action_SecondFragment_self)
             }
-            Log.d("...", MainActivity.logged_in.toString())
+            Log.d("...", logged_in.toString())
             view.findViewById<ImageButton>(R.id.user_back).setOnClickListener {
                 view.findNavController().navigate(R.id.action_SecondFragment_to_scrollingFragment)
-                //activity?.findNavController(R.id.secondConstraint)?.navigate(R.id.action_SecondFragment_to_scrollingFragment)
             }
             val email=arguments?.getString("email")
             val name=arguments?.getString("name")
@@ -175,8 +144,7 @@ class SecondFragment : Fragment(), CoroutineScope {
                 launch {
                     Log.d("email?", "email?")
                     if (list == null || list?.size == 0) {
-
-                        list = vm?.value?.allUsers?.first()
+                        list=vm.allUsers.first()
                     }
                     if (list != null) {
                         for (i in list!!) {
@@ -188,7 +156,6 @@ class SecondFragment : Fragment(), CoroutineScope {
                             }
                         }
                     }
-
                 }
             }
             else{
@@ -196,7 +163,6 @@ class SecondFragment : Fragment(), CoroutineScope {
                 view.findViewById<TextView>(R.id.user_name).text=name
                 view.findViewById<TextView>(R.id.user_phone).text=phone
                 view.findViewById<TextView>(R.id.user_email).text=email
-
             }
         }
     }
