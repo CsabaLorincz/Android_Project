@@ -68,6 +68,7 @@ class FirstFragment : Fragment(), CoroutineScope {
                     Log.d("APIDATA_LENGTH", FragmentComp.list.size.toString())
                     saveToCompanion(list)
                     if (countLoading == countries.size){
+                        Log.d("restaurantSize: ", list.size.toString())
                         if(countries.size==1){
                             setToCountries(listOf("Hungary", "Romania"))
                             setToCities(listOf("Marosvasarhely", "Koronka", "Csikszereda", "Budapest", "Szeged"))

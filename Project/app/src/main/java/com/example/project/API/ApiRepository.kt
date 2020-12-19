@@ -6,8 +6,8 @@ import restaurant.CountryBy
 import restaurant.RestaurantBy
 
 class ApiRepository {
-    suspend fun getRestaurantsByCountry(country:String):RestaurantBy{
-        return MainActivity.RestaurantApi.retrofitService.getRestaurantsByCountry(country)
+    suspend fun getRestaurantsByCountry(country:String, page: Int):RestaurantBy{
+        return MainActivity.RestaurantApi.retrofitService.getRestaurantsByCountry(country, page)
     }
 
     suspend fun getCountries(): CountryBy {

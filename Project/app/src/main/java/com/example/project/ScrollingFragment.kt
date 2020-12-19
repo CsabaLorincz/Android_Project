@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
@@ -51,7 +52,7 @@ class ScrollingFragment : Fragment(),CoroutineScope {
             Log.d("???", "oh")
             restaurantAdapter = ItemRecyclerViewAdapter()
             restaurantAdapter.setData(restaurants)
-
+            Log.d("Vanish", restaurants.size.toString())
             val x=launch {
 
                 userFav=userViewModel.userFav.first()
@@ -79,11 +80,13 @@ class ScrollingFragment : Fragment(),CoroutineScope {
         restaurantList=view.findViewById(R.id.recycler)
         val back=view.findViewById<ImageButton>(R.id.scrolling_back)
         back.setOnClickListener{
+            filterFlag=0
             view.findNavController().navigate(R.id.scrollingFragment)
         }
             with(view) {
                 val searchBar = view.findViewById<SearchView>(R.id.searchView)
                 searchBar.setOnCloseListener {
+                    filterFlag=0
                     view.findNavController().navigate(R.id.scrollingFragment)
                     true
                 }
@@ -176,6 +179,33 @@ class ScrollingFragment : Fragment(),CoroutineScope {
                     }
 
             }
+        val shpg=view.findViewById<TextView>(R.id.showPage)
+        val pgDown=view.findViewById<ImageButton>(R.id.PageDown)
+        val pgUp=view.findViewById<ImageButton>(R.id.PageUp)
+        val gotoPg=view.findViewById<EditText>(R.id.gotoPage)
+        shpg.text=MainActivity.currentPage.toString()
+        pgDown.setOnClickListener {
+            MainActivity.reduceCurrentPage()
+            filterFlag=0
+            view.findNavController().navigate(R.id.scrollingFragment)
+        }
+        pgUp.setOnClickListener {
+            MainActivity.increaseCurrentPage()
+            filterFlag=0
+            view.findNavController().navigate(R.id.scrollingFragment)
+        }
+        val letsgo=view.findViewById<Button>(R.id.letsGoPage)
+        letsgo.isEnabled=false
+        gotoPg.addTextChangedListener{
+            if(gotoPg.text.isNotBlank())
+                letsgo.isEnabled=true
+        }
+        letsgo.setOnClickListener {
+            val pgg = gotoPg.text.toString() to Int
+            MainActivity.setCurrPageToNumber(pgg.first.toInt())
+            filterFlag=0
+            view.findNavController().navigate(R.id.scrollingFragment)
+        }
 
         return view
     }

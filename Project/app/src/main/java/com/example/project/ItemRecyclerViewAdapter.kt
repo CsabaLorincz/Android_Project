@@ -47,12 +47,14 @@ class ItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: RestaurantViewHolder, position: Int) {
 
-        if(!restaurants.isEmpty() && position<searchableRestaurants.size) {
+        if(!searchableRestaurants.isEmpty() && position<searchableRestaurants.size) {
             holder.fav.isEnabled = MainActivity.logged_in
             var rest: Restaurant
-
+            Log.d("favo2?", position.toString())
             try{
-                rest = restaurants[position]
+
+                rest = searchableRestaurants[position]
+                Log.d("favo23?", position.toString()+" "+itemCount +" " + searchableRestaurants.size)
                 Log.d("RESTTTT", rest.toString())
                 Glide.with(holder.itemView.context)
                         .load(rest.image_url)
@@ -96,8 +98,8 @@ class ItemRecyclerViewAdapter(
 
 
                 holder.lay.setOnClickListener {
-                    if (!restaurants.isEmpty()) {
-                        val rest = restaurants[position]
+                    if (!searchableRestaurants.isEmpty()) {
+                        val rest = searchableRestaurants[position]
                         val bundle = bundleOf(
                                 "id" to rest.id,
                                 "name" to rest.name,
@@ -129,6 +131,13 @@ class ItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = searchableRestaurants.size
 
+    private fun minim(a: Int, b: Int):Int{
+        if(a<b)
+            return a
+        return b
+    }
+
+
     inner class RestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val img: ImageView=view.findViewById(R.id.item_image)
@@ -144,8 +153,31 @@ class ItemRecyclerViewAdapter(
     }
 
     fun setData(restaurants: List<Restaurant>) {
+        var count=0
+        var restaurants2= listOf<Restaurant>()
+        Log.d("Vanish2", restaurants.size.toString())
+        val start = (MainActivity.currentPage-1) * MainActivity.page_entries
+        Log.d("vanish3", start.toString())
+        for(i in ((MainActivity.currentPage-1)*MainActivity.page_entries) until (restaurants.size)){
+            ++count
+            Log.d("Vanish1", count.toString() + " " + i.toString() +
+                    " "+((MainActivity.currentPage-1)*MainActivity.page_entries)+" "+restaurants.size)
+            try {
+                restaurants2 += restaurants[i]
+            }catch(e:java.lang.Exception){
+                Log.d("excp2", e.toString())
+                break
+            }
+            if(count>=MainActivity.page_entries){
+                break
+            }
+        }
+
         this.restaurants = restaurants
-        this.searchableRestaurants = restaurants.toMutableList()
+        this.searchableRestaurants = restaurants2.toMutableList()
+        Log.d("Vanish?", searchableRestaurants.size.toString()+" "+MainActivity.currentPage)
+        if(searchableRestaurants.size==0 || searchableRestaurants.isEmpty())
+            searchableRestaurants=restaurants.toMutableList()
         notifyDataSetChanged()
     }
 
@@ -239,9 +271,13 @@ class ItemRecyclerViewAdapter(
                                     Log.d("favo", "${favourites[item]}")
                                     Log.d("favo", restaurants[jtem].toString())
                                     if(favourites[item].restaurantId==restaurants[jtem].id) {
-                                        Log.d("favo", restaurants[jtem].toString())
-                                        if(!searchableRestaurants.contains(restaurants[jtem]))
+                                        Log.d("favo2", restaurants[jtem].toString())
+                                        if(!searchableRestaurants.contains(restaurants[jtem])){
+                                            Log.d("favo22", itemCount.toString())
                                             searchableRestaurants.add(restaurants[jtem])
+                                            Log.d("favo23", itemCount.toString())
+                                        }
+
                                     }
                                 }
                             }
@@ -257,9 +293,12 @@ class ItemRecyclerViewAdapter(
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 if(searchableRestaurants.isNullOrEmpty()) {
                     setData(restaurants)
+                    Log.d("Vanish<", restaurants.size.toString())
                 }
                 else {
+                    Log.d("Vanish..", searchableRestaurants.size.toString())
                     setData(searchableRestaurants)
+
                 }
                 notifyDataSetChanged()
             }

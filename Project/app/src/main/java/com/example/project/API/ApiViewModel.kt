@@ -1,7 +1,9 @@
 package com.example.project.API
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.project.MainActivity
 import restaurant.CityBy
 import restaurant.CountryBy
 import restaurant.Restaurant
@@ -11,9 +13,15 @@ class ApiViewModel(private val repository: ApiRepository):ViewModel() {
     val restaurants: MutableLiveData<List<Restaurant>> = MutableLiveData()
     val cities: MutableLiveData<List<String>> = MutableLiveData()
     val countries: MutableLiveData<List<String>> = MutableLiveData()
-    suspend fun getRestaurantByCountry(country: String){
-        val res=repository.getRestaurantsByCountry(country)
-        restaurants.value=restaurantsByCountryConverter(res)
+    var pageNum:Int =0
+    suspend fun getRestaurantByCountry(country: String, page:Int):RestaurantBy{
+       val res=repository.getRestaurantsByCountry(country, page)
+       pageNum=res.total_entries/res.per_page
+       if(pageNum*res.per_page!=res.total_entries){
+           ++pageNum
+       }
+        Log.d("restaurantSize00", pageNum.toString() + " "+res.total_entries.toString()+" "+res.per_page.toString())
+       return res
     }
 
     suspend fun getCities(){
@@ -40,7 +48,17 @@ class ApiViewModel(private val repository: ApiRepository):ViewModel() {
 
     }
     suspend fun loadRestaurants(country: String){
-        getRestaurantByCountry(country)
+        var i=1
+        var ress:List<Restaurant> = listOf()
+        do{
+            val res=getRestaurantByCountry(country, i)
+            ++i
+            Log.d("restaurantSize0", res.restaurants.size.toString()+" "+i.toString()+" "+pageNum.toString())
+            ress += restaurantsByCountryConverter(res)
+        }while(i<=pageNum)
+
+        restaurants.value = ress
+        MainActivity.setToPageNum(pageNum)
     }
 
     suspend fun loadCities(){

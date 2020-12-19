@@ -1,6 +1,7 @@
 package com.example.project
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         suspend fun getCities():
                 CityBy
         @GET("restaurants")
-        suspend fun getRestaurantsByCountry(@Query("country")country:String):
+        suspend fun getRestaurantsByCountry(@Query("country")country:String, @Query("page")page: Int):
                 RestaurantBy
 
     }
@@ -112,6 +113,26 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
 
         var filterFlag=0
+        var currentPage=1
+        var pageNum=0
+        fun setToPageNum(Num: Int){
+            pageNum+=Num
+        }
+        fun increaseCurrentPage(){
+            if(currentPage< pageNum)
+                ++currentPage
+            Log.d("pages: ", currentPage.toString() + "/"+ pageNum.toString())
+        }
+        fun reduceCurrentPage(){
+            if(currentPage>1)
+                --currentPage
+            Log.d("pages: ", currentPage.toString() + "/"+ pageNum.toString())
+        }
+        val page_entries=25
+        fun setCurrPageToNumber(pg: Int){
+            if(pg>0 && pg<=pageNum)
+                currentPage=pg
+        }
     }
 
 

@@ -90,5 +90,75 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/scrolling_back"
             app:layout_constraintTop_toBottomOf="@+id/citySpinner" />
+
+        <ImageButton
+            android:id="@+id/PageDown"
+            android:layout_width="72dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="144dp"
+            android:layout_marginLeft="144dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@android:drawable/arrow_down_float"
+            app:layout_constraintBottom_toTopOf="@+id/countrySpinner"
+            app:layout_constraintEnd_toStartOf="@+id/showPage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/PageUp"
+            android:layout_width="72dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="52dp"
+            android:layout_marginRight="52dp"
+            android:src="@android:drawable/arrow_up_float"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/showPage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/showPage"
+            android:layout_width="47dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="53dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/citySpinner"
+            app:layout_constraintEnd_toStartOf="@+id/PageUp"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/PageDown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/gotoPage"
+            android:layout_width="77dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="37dp"
+            android:layout_marginLeft="37dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="26dp"
+            android:layout_marginRight="26dp"
+            android:ems="10"
+            android:inputType="number"
+            android:textSize="8sp"
+            app:layout_constraintBottom_toTopOf="@+id/countrySpinner"
+            app:layout_constraintEnd_toStartOf="@+id/PageDown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/letsGoPage"
+            android:layout_width="30dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toStartOf="@+id/gotoPage"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
