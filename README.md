@@ -19,6 +19,7 @@ Moreover you can have as many local users as you want, all with their own lists,
 |Flow|Used in UserViewModel|
 |Livedata|Used in ApiViewModel|
 |Navigation|Changing between fragments|
+
 ##API link
 [Ratpark-api](https://ratpark-api.imok.space/)
 
