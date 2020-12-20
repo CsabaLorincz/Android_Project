@@ -86,6 +86,12 @@ class FirstFragment : Fragment(), CoroutineScope {
                                             "Budapest", "Hely", "0212", "Hungary", "0756556", 0.1, 0.1, 4.0, "", "", "")))
 
                         }
+                        var pgc=FragmentComp.list.size/MainActivity.page_entries
+                        if(MainActivity.page_entries*pgc!=FragmentComp.list.size){
+                            ++pgc
+                        }
+                        Log.d("pgc", pgc.toString() + " "+FragmentComp.list.size.toString()+ " "+MainActivity.page_entries.toString())
+                        MainActivity.setToPageNum(pgc)
                         findNavController().navigate(R.id.action_FirstFragment_to_scrollingFragment)
                     }
 

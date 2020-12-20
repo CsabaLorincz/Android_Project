@@ -131,13 +131,6 @@ class ItemRecyclerViewAdapter(
 
     override fun getItemCount(): Int = searchableRestaurants.size
 
-    private fun minim(a: Int, b: Int):Int{
-        if(a<b)
-            return a
-        return b
-    }
-
-
     inner class RestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val img: ImageView=view.findViewById(R.id.item_image)
@@ -173,7 +166,7 @@ class ItemRecyclerViewAdapter(
             }
         }
 
-        this.restaurants = restaurants
+        this.restaurants = FirstFragment.list
         this.searchableRestaurants = restaurants2.toMutableList()
         Log.d("Vanish?", searchableRestaurants.size.toString()+" "+MainActivity.currentPage)
         if(searchableRestaurants.size==0 || searchableRestaurants.isEmpty())

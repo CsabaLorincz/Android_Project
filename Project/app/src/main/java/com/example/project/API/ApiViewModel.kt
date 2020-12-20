@@ -3,7 +3,6 @@ package com.example.project.API
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.project.MainActivity
 import restaurant.CityBy
 import restaurant.CountryBy
 import restaurant.Restaurant
@@ -58,7 +57,6 @@ class ApiViewModel(private val repository: ApiRepository):ViewModel() {
         }while(i<=pageNum)
 
         restaurants.value = ress
-        MainActivity.setToPageNum(pageNum)
     }
 
     suspend fun loadCities(){
